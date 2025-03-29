@@ -1,3 +1,22 @@
+/**************************************************************************
+ *                          STATTRACK Airsoft V1                          *
+ *------------------------------------------------------------------------*
+ * Auteur  : Bulbicrave                                                   *
+ * Date    : 19/03/2025                                                   *
+ * Matériel: Arduino Nano, button, Digit 7 * 6 Element                    *
+ */const int Version = 1;                                                /*
+ *------------------------------------------------------------------------*
+ * Description :                                                          *
+ * Ce programme permet de suivre les statistiques d'une partie d'airsoft  *
+ * en affichant diverses informations                                     *
+ *                                                                        *
+ *------------------------------------------------------------------------*
+ * Licence : CopyrAithe                                                   *
+ * Vous êtes libre d'utiliser, modifier et partager ce code à des fins    *
+ * personnelles et éducatives. Toute utilisation commerciale nécessite    *
+ * une autorisation explicite de l'auteur.                                *
+ **************************************************************************/
+
 #include <Arduino.h>
 #include <TM1637TinyDisplay6.h>
 #include <AT24C256.h>
