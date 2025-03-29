@@ -46,6 +46,9 @@ Module de comptage de touche pour réplique Airsoft
 
 ## STL 
 
+In progress
+
+Send message for some 3d design
 
 # Program
 
@@ -68,5 +71,10 @@ Make sur you select the old ATmega328P(OLD) for the arduino on the tuto :
 New features with some menu 
 
 Add battery on the tuto (in progress) 
+
+# Contact 
+
+Discord = Bulbicrave
+
 
 
