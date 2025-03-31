@@ -1,3 +1,24 @@
+/**************************************************************************
+ *                          STATTRACK Airsoft V2.                         *
+ *------------------------------------------------------------------------*
+ * Auteur  : Bulbicrave                                                   *
+ * Date    : 31/03/2025                                                   *
+ * Matériel: Arduino Nano, button, Ecran Oled 160*80.                     *
+ */const int Version = 2;                                                /*
+ *------------------------------------------------------------------------*
+ * Description :                                                          *
+ * Ce programme permet de suivre les statistiques d'une partie d'airsoft  *
+ * en affichant diverses informations                                     *
+ *                                                                        *
+ *------------------------------------------------------------------------*
+ * Licence : CopyrAithe                                                   *
+ * Vous êtes libre d'utiliser, modifier et partager ce code à des fins    *
+ * personnelles et éducatives. Toute utilisation commerciale nécessite    *
+ * une autorisation explicite de l'auteur.                                *
+ **************************************************************************/
+ 
+ 
+
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <SPI.h>
