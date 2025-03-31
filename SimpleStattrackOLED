@@ -1,0 +1,138 @@
+/**************************************************************************
+ *                          STATTRACK Airsoft V2.                         *
+ *------------------------------------------------------------------------*
+ * Auteur  : Bulbicrave                                                   *
+ * Date    : 31/03/2025                                                   *
+ * Matériel: Arduino Nano, button, Ecran Oled 160*80.                     *
+ */const int Version = 2;                                                /*
+ *------------------------------------------------------------------------*
+ * Description :                                                          *
+ * Ce programme permet de suivre les statistiques d'une partie d'airsoft  *
+ * en affichant diverses informations                                     *
+ *                                                                        *
+ *------------------------------------------------------------------------*
+ * Licence : CopyrAithe                                                   *
+ * Vous êtes libre d'utiliser, modifier et partager ce code à des fins    *
+ * personnelles et éducatives. Toute utilisation commerciale nécessite    *
+ * une autorisation explicite de l'auteur.                                *
+ **************************************************************************/
+ 
+ 
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
+#include <SPI.h>
+#include <AT24C256.h>
+#include "StattrackComplet15pt7b.h"  
+
+#define BOUTON 3  // Bouton sur la broche 3
+
+// Broche Ecran
+#define TFT_CS        10
+#define TFT_RST        8 
+#define TFT_DC         9
+int xstart = 7;
+int ystart = 50;
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+
+int kill = 0;
+uint8_t Init = 0; // Stocké sur 1 octet
+volatile bool flag = false; // Drapeau pour détecter un appui
+
+AT24C256 eeprom(0x50);
+
+
+void setup() {
+  pinMode(BOUTON, INPUT_PULLUP); // Bouton avec pull-up interne
+  attachInterrupt(digitalPinToInterrupt(BOUTON), onBoutonPress, FALLING); // Déclenche sur appui
+  
+  Serial.begin(9600);
+  Serial.println("Démarrage...");
+
+  // Lecture des valeurs en EEPROM
+  eeprom.read(0, &Init, sizeof(Init));
+  eeprom.read(1, (uint8_t*)&kill, sizeof(kill));
+
+  Serial.print("Valeur Init: ");
+  Serial.println(Init);
+  Serial.print("Kill init: ");
+  Serial.println(kill);
+
+  // Vérification de l'initialisation
+  if (Init != 1) {  
+    Serial.println("Première initialisation...");
+    kill = 0;
+    Init = 1;
+    eeprom.write(0, &Init, sizeof(Init));
+    delay(10);  // Attente pour éviter des corruptions mémoire
+    eeprom.write(1, (uint8_t*)&kill, sizeof(kill));
+    delay(10);
+  }
+    
+    tft.initR(INITR_MINI160x80);
+    tft.setFont(&StattrackComplet15pt7b); // Utiliser la police personnalisée
+    tft.setRotation(1);
+    tft.fillScreen(ST77XX_BLACK);
+    delay(1000);
+    
+    tft.setCursor(xstart, ystart);
+    afficherKill(); // Afficher le kill count
+}
+
+    
+
+
+
+void loop() {
+    if (flag) {
+        flag = false;
+
+        // Incrémentation du nombre de kills
+        kill++;
+        Serial.print("Kill: ");
+        Serial.println(kill);
+        tft.fillScreen(ST77XX_BLACK);
+        tft.setCursor(xstart, ystart);
+        afficherKill();
+
+        // Sauvegarde dans l'EEPROM
+        eeprom.write(1, (uint8_t*)&kill, sizeof(kill));
+        delay(10);
+    }
+
+}
+
+
+
+
+void onBoutonPress() {
+  static unsigned long lastPress = 0;
+  unsigned long now = millis();
+
+  if (now - lastPress > 50) { // Anti-rebond logiciel
+    flag = true;
+  }
+  lastPress = now;
+}
+
+// Affichage du kill count en format 6 chiffres (000000)
+void afficherKill() {
+  int spacing = 25; 
+  int x = 5;
+  tft.fillRect(0, 50, 160, 30, ST77XX_BLACK); // Effacer uniquement la zone des kills
+  tft.setCursor(xstart, ystart);
+  tft.setTextColor(tft.color565(7,127,254)); // B V R
+
+  char buffer[7]; // 6 chiffres + null terminator
+  sprintf(buffer, "%06d", kill); // Formater avec des 0 devant
+  Serial.println(buffer[1]);
+  for(int y = 0; y < 6; y++)
+  {
+    tft.setCursor(x, ystart);
+    tft.print(buffer[y]);
+    x = x + spacing;
+  }
+}
+
+
+
+
