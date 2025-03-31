@@ -17,7 +17,6 @@
  * une autorisation explicite de l'auteur.                                *
  **************************************************************************/
  
- 
 
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
@@ -25,9 +24,7 @@
 #include <AT24C256.h>
 #include "StattrackComplet15pt7b.h"
 
-
 #define BOUTON 3  // Bouton sur la broche 3
-
 
 // Broche Ecran
 #define TFT_CS        10
@@ -141,12 +138,11 @@ void afficherKill() {
     int x = 7;
     int x1 = 7;
     int x2 = 22;
-    tft.setTextColor(tft.color565(YELLOW)); // B V R
+    tft.setTextColor(tft.color565(7,127,254)); // B V R
 
     char buffer[7]; // 6 chiffres + null terminator
     sprintf(buffer, "%06d", kill); // Formater avec des 0 devant
     for(int y = 0; y < 6; y++) {
-       // tft.fillRect(x1, 22, 22, 33, tft.color565(17, 17, 74)); // Effacer uniquement la zone des kills      
         tft.setCursor(x, ystart);
         tft.print(buffer[y]);
         x1 = x1 + spacing; 
